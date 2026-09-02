@@ -310,7 +310,10 @@ public final class RemoteRepoContentsCacheImpl implements RemoteRepoContentsCach
     }
 
     return remoteFs.injectRemoteRepo(
-        repoName, repoDirectoryContentFuture.resultNow(), markerFileContent);
+        repoName,
+        repoDirectoryContentFuture.resultNow(),
+        repoDirectory.getTreeDigest(),
+        markerFileContent);
   }
 
   private enum CacheOp {
