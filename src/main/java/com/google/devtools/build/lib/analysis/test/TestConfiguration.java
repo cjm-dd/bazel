@@ -318,6 +318,18 @@ public class TestConfiguration extends Fragment {
     public boolean incompatibleExclusiveTestSandboxed;
 
     @Option(
+        name = "incompatible_separate_test_spawn_mnemonics",
+        defaultValue = "true",
+        documentationCategory = OptionDocumentationCategory.EXECUTION_STRATEGY,
+        effectTags = {OptionEffectTag.EXECUTION},
+        metadataTags = {OptionMetadataTag.INCOMPATIBLE_CHANGE},
+        help =
+            "If true, Bazel gives test.xml generation and coverage postprocessing spawns "
+                + "mnemonics distinct from TestRunner. Use "
+                + "--noincompatible_separate_test_spawn_mnemonics to retain the legacy mnemonic.")
+    public boolean incompatibleSeparateTestSpawnMnemonics;
+
+    @Option(
         name = "experimental_split_coverage_postprocessing",
         defaultValue = "false",
         documentationCategory = OptionDocumentationCategory.EXECUTION_STRATEGY,
@@ -459,6 +471,10 @@ public class TestConfiguration extends Fragment {
 
   public boolean incompatibleExclusiveTestSandboxed() {
     return options.incompatibleExclusiveTestSandboxed;
+  }
+
+  public boolean incompatibleSeparateTestSpawnMnemonics() {
+    return options.incompatibleSeparateTestSpawnMnemonics;
   }
 
   public boolean splitCoveragePostProcessing() {

@@ -108,7 +108,6 @@ public class TestRunnerAction extends AbstractAction
   private static final String TEST_BRIDGE_TEST_FILTER_ENV = "TESTBRIDGE_TEST_ONLY";
 
   private static final String GUID = "cc41f9d0-47a6-11e7-8726-eb6ce83a8cc8";
-  public static final String MNEMONIC = "TestRunner";
 
   private static final GoogleLogger logger = GoogleLogger.forEnclosingClass();
 
@@ -170,7 +169,7 @@ public class TestRunnerAction extends AbstractAction
   private final CancelConcurrentTests cancelConcurrentTests;
 
   private final boolean splitCoveragePostProcessing;
-
+  private final boolean incompatibleSeparateTestSpawnMnemonics;
   private final NestedSet<Artifact> lcovMergerFilesToRun;
 
   // TODO(b/192694287): Remove once we migrate all tests from the allowlist.
@@ -219,6 +218,7 @@ public class TestRunnerAction extends AbstractAction
       @Nullable PathFragment shExecutable,
       CancelConcurrentTests cancelConcurrentTests,
       boolean splitCoveragePostProcessing,
+      boolean incompatibleSeparateTestSpawnMnemonics,
       NestedSet<Artifact> lcovMergerFilesToRun,
       PackageSpecificationProvider networkAllowlist) {
     super(
@@ -283,6 +283,7 @@ public class TestRunnerAction extends AbstractAction
             this.extraTestEnv.getInheritedEnv());
     this.cancelConcurrentTests = cancelConcurrentTests;
     this.splitCoveragePostProcessing = splitCoveragePostProcessing;
+    this.incompatibleSeparateTestSpawnMnemonics = incompatibleSeparateTestSpawnMnemonics;
     this.lcovMergerFilesToRun = lcovMergerFilesToRun;
     this.networkAllowlist = networkAllowlist;
 
@@ -354,6 +355,11 @@ public class TestRunnerAction extends AbstractAction
 
   public boolean getSplitCoveragePostProcessing() {
     return splitCoveragePostProcessing;
+  }
+
+  /** Returns whether derived test spawns use mnemonics distinct from TestRunner. */
+  public boolean usesSeparateSpawnMnemonics() {
+    return incompatibleSeparateTestSpawnMnemonics;
   }
 
   public NestedSet<Artifact> getLcovMergerFilesToRun() {
@@ -1065,7 +1071,7 @@ public class TestRunnerAction extends AbstractAction
 
   @Override
   public String getMnemonic() {
-    return MNEMONIC;
+    return TestRunnerActionConstants.MNEMONIC;
   }
 
   @Override

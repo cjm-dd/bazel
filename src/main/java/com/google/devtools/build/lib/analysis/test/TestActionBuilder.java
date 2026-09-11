@@ -408,6 +408,8 @@ public final class TestActionBuilder {
                 : CancelConcurrentTests.NEVER;
 
         boolean splitCoveragePostProcessing = testConfiguration.splitCoveragePostProcessing();
+        boolean incompatibleSeparateTestSpawnMnemonics =
+            testConfiguration.incompatibleSeparateTestSpawnMnemonics();
         // TODO(b/234923262): Take exec_group into consideration when selecting sh tools
         TestRunnerAction testRunnerAction =
             new TestRunnerAction(
@@ -439,6 +441,7 @@ public final class TestActionBuilder {
                     : null,
                 cancelConcurrentTests,
                 splitCoveragePostProcessing,
+                incompatibleSeparateTestSpawnMnemonics,
                 lcovMergerFilesToRun,
                 // Network allowlist only makes sense in workspaces which explicitly add it, use an
                 // empty one as a fallback.

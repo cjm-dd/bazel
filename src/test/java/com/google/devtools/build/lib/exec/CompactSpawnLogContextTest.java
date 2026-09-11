@@ -170,7 +170,7 @@ public final class CompactSpawnLogContextTest extends SpawnLogContextTestBase {
     Artifact toolRunfilesMiddleman = ActionsTestUtil.createArtifact(middlemanDir, "runfiles");
 
     PathFragment runfilesRoot = outputDir.getExecPath().getRelative("foo.runfiles");
-    RunfilesTree runfilesTree = createRunfilesTree(runfilesRoot, tool);
+    RunfilesTree runfilesTree = createCachedRunfilesTree(runfilesRoot, tool);
 
     Artifact firstInput = ActionsTestUtil.createArtifact(rootDir, "first_input");
     writeFile(firstInput, "def");

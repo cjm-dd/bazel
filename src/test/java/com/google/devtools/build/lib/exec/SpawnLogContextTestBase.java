@@ -2079,11 +2079,32 @@ public abstract class SpawnLogContextTestBase {
         root, ImmutableMap.of(), ImmutableMap.of(), /* legacyExternalRunfiles= */ false, artifacts);
   }
 
+  protected static RunfilesTree createCachedRunfilesTree(PathFragment root, Artifact... artifacts) {
+    return createRunfilesTree(
+        root,
+        ImmutableMap.of(),
+        ImmutableMap.of(),
+        /* legacyExternalRunfiles= */ false,
+        /* cacheMapping= */ true,
+        NestedSetBuilder.wrap(Order.COMPILE_ORDER, Arrays.asList(artifacts)));
+  }
+
   protected static RunfilesTree createRunfilesTree(
       PathFragment root,
       Map<String, Artifact> symlinks,
       Map<String, Artifact> rootSymlinks,
       boolean legacyExternalRunfiles,
+      NestedSet<Artifact> artifacts) {
+    return createRunfilesTree(
+        root, symlinks, rootSymlinks, legacyExternalRunfiles, /* cacheMapping= */ false, artifacts);
+  }
+
+  private static RunfilesTree createRunfilesTree(
+      PathFragment root,
+      Map<String, Artifact> symlinks,
+      Map<String, Artifact> rootSymlinks,
+      boolean legacyExternalRunfiles,
+      boolean cacheMapping,
       NestedSet<Artifact> artifacts) {
     Runfiles.Builder runfiles =
         new Runfiles.Builder(TestConstants.WORKSPACE_NAME, legacyExternalRunfiles);
@@ -2095,7 +2116,7 @@ public abstract class SpawnLogContextTestBase {
       runfiles.addRootSymlink(PathFragment.create(entry.getKey()), entry.getValue());
     }
     runfiles.setEmptyFilesSupplier(BazelPyBuiltins.GET_INIT_PY_FILES);
-    return new RunfilesSupport.RunfilesTreeImpl(root, runfiles.build());
+    return new RunfilesSupport.RunfilesTreeImpl(root, runfiles.build(), cacheMapping);
   }
 
   protected static RunfilesTree createRunfilesTree(
